@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Tugas Data Pegawai</title>
+  <style>
+    table { border-collapse: collapse; width: 70%; margin: 20px auto; }
+    th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+    thead { background: #ddd; }
+    tfoot { background: #eee; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Data Pegawai</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>Umur</th>
+      <th>Jabatan</th>
+      <th>Status</th>
+      <th>Gaji Pokok</th>
+      <th>Tunjangan Jabatan</th>
+      <th>BPJS</th>
+      <th>Tunjangan Keluarga</th>
+    </tr>
+  </thead>
+  <tbody id="isiTabel"></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="7">Total Gaji</td>
+      <td id="total"></td>
+    </tr>
+  </tfoot>
+</table>
+
+<script>
+  // data pegawai
+  let namaPegawai = "Dodi Prayodi";
+  let umurPegawai = 25;
+  let jabatanPegawai = "Manajer";
+  let statusPegawai = "Menikah";
+
+  // fungsi format rupiah sederhana
+  function rupiah(uang){
+    return "Rp " + uang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  // tentukan gaji pokok pakai switch
+  let gajiPokok;
+  switch(jabatanPegawai.toLowerCase()){
+    case "manajer": gajiPokok = 15000000; break;
+    case "asisten manajer": gajiPokok = 10000000; break;
+    case "staff": gajiPokok = 5000000; break;
+    default: gajiPokok = 0;
+  }
+
+  // hitung tunjangan jabatan
+  let tJabatan = 0.15 * gajiPokok;
+  // hitung BPJS
+  let potBpjs = 0.10 * gajiPokok;
+  // tunjangan keluarga 
+  let tKeluarga = (statusPegawai.toLowerCase() === "menikah") ? 0.20 * gajiPokok : 0;
+
+  // total gaji
+  let gajiTotal = gajiPokok + tJabatan + tKeluarga - potBpjs;
+
+  // tampilkan ke tabel
+  document.getElementById("isiTabel").innerHTML = `
+    <tr>
+      <td>${namaPegawai}</td>
+      <td>${umurPegawai}</td>
+      <td>${jabatanPegawai}</td>
+      <td>${statusPegawai}</td>
+      <td>${rupiah(gajiPokok)}</td>
+      <td>${rupiah(tJabatan)}</td>
+      <td>${rupiah(potBpjs)}</td>
+      <td>${rupiah(tKeluarga)}</td>
+    </tr>
+  `;
+
+  document.getElementById("total").innerText = rupiah(gajiTotal);
+</script>
+
+</body>
+</html>
